@@ -1,0 +1,23 @@
+unit ReportGenUnit;
+
+interface
+
+uses  System.Classes;
+
+ type
+  TReportGen = class (TObject)
+  arFileList: TStringList;
+  constructor TReportGen;
+ end;
+
+implementation
+
+{ TReportGen }
+
+
+constructor TReportGen.TReportGen;
+begin
+ arFileList := TStringList.Create;
+end;
+
+end.

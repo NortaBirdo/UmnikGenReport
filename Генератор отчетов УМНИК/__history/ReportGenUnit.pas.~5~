@@ -1,0 +1,69 @@
+unit ReportGenUnit;
+
+interface
+
+uses  System.Classes;
+
+ type
+  TReportGen = class (TObject)
+  arFileList: TStringList;
+  constructor TReportGen;
+  function CopyRange(WordDoc: OleVariant; sFrom, sTo:string): boolean;
+ end;
+
+implementation
+
+{ TReportGen }
+
+//процедура копирования части текста из одного в другой документ
+function TReportGen.CopyRange(WordDoc: OleVariant; sFrom, sTo:string): boolean;
+Var
+ FStart, FEnd, a, b: OleVariant;
+ i,DocLen:longint;
+Begin
+  Result:=false;
+  FStart:=0;
+  FEnd:=0;
+  WordDoc.Documents.Item(2).Activate;
+  DocLen:=Length(WordDoc.Documents.Item(2).Range.Text);
+
+  For i:=0 to DocLen-2 do
+   begin
+    a:=i;
+    b:=i+2;
+    if (WordDoc.Documents.Item(2).Range(a,b).Text=sFrom) then FStart:=i+2
+    else if (WordDoc.Documents.Item(2).Range(a,b).Text=sTo) then FEnd:=i;
+    end;
+  if (FStart=0) or (FEnd=0) then showmessage('Ошибка') else
+ begin
+  WordDoc.Documents.Item(2).Range(FStart, FEnd).Select;
+  WordDoc.Selection.Copy;
+ end;
+//====================================================================
+   FStart:=0;
+   FEnd:=0;
+   DocLen:=Length(WordDoc.Documents.Item(1).Range.Text);
+  For i:=0 to DocLen-2 do begin
+    a:=i; b:=i+2;
+    if (WordDoc.Documents.Item(1).Range(a,b).Text=sFrom) then FStart:=i
+    else if (WordDoc.Documents.Item(1).Range(a,b).Text=sFrom) then FEnd:=i+2;
+    end;
+
+ if (FStart=0) or (FEnd=0) then showmessage('Ошибка') else
+ begin
+  WordDoc.Documents.Item(1).Range(FStart, FEnd).Select;
+  WordDoc.Selection.Paste;
+  Result:=true;
+ end;
+  WordDoc.Documents.Item(1).Activate;
+  WordDoc.ActiveDocument.SaveAs(ADocument2);
+   WordDoc.Quit;
+   WordDoc:=Unassigned;
+  End;
+
+constructor TReportGen.TReportGen;
+begin
+ arFileList := TStringList.Create;
+end;
+
+end.

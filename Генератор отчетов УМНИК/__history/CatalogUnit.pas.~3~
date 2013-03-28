@@ -1,0 +1,17 @@
+unit CatalogUnit;
+
+interface
+type
+TCatalog= class (Tobject)
+ procedure GetFileList;
+ end;
+implementation
+
+{ TCatalog }
+
+procedure TCatalog.GetFileList;
+begin
+//
+end;
+
+end.

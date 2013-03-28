@@ -1,0 +1,39 @@
+unit CatalogUnit;
+
+interface
+
+uses SysUtils;
+
+type
+TCatalog= class (Tobject)
+ sFolderName: string;
+ arFileList: array of string;
+ procedure GetFileList;
+ end;
+implementation
+
+{ TCatalog }
+
+procedure TCatalog.GetFileList;
+var
+  SearchRec: TSearchRec;
+  Mask: string;
+begin
+  Mask := '*.doc|*.docx';
+  sFolderName := sFolderName + '\';
+  if FindFirst(sFolderName + Mask, faAnyFile, SearchRec) = 0 then
+  begin
+
+    repeat
+     if (SearchRec.Attr and faDirectory) <> faDirectory then
+        List.Add(sFolderName + SearchRec.Name)
+      else if (SearchRec.Name <> '..') and (SearchRec.Name <> '.')then begin
+        List.Add(sFolderName + SearchRec.Name + '\');
+      ScanDir(sFolderName + SearchRec.Name + '\', Mask, List);
+       end;
+     until FindNext(SearchRec) <> 0;
+     FindClose(SearchRec);
+end;
+end;
+
+end.

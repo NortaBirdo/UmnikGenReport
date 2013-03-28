@@ -1,0 +1,19 @@
+unit CatalogUnit;
+
+interface
+type
+TCatalog= class (Tobject)
+ sFolderName: string;
+ arFileList: array of string;
+ procedure GetFileList;
+ end;
+implementation
+
+{ TCatalog }
+
+procedure TCatalog.GetFileList;
+begin
+
+end;
+
+end.
