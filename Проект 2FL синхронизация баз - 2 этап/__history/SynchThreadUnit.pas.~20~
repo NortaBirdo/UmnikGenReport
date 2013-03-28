@@ -1,0 +1,68 @@
+unit SynchThreadUnit;
+
+interface
+
+uses
+  System.Classes, IBQuery, SQLite3, SQLiteWrap, IBDatabase;
+
+type
+  TSynchTheard = class(TThread)
+
+  iTotalCount, iProcessingCount:integer; //счетчики всей обработки ит екущей обработки
+  IBQueryExec: TIBQuery;
+  IBTranc: TIBTransaction;
+  SQLiteTabExec: TSQLiteTable;
+  db: TSQLiteDatabase;
+  SQliteQueryExec, FBqueryExec: TStringList;
+  private
+    { Private declarations }
+  protected
+
+    procedure Execute; override;
+    procedure UpDateForm;
+
+  end;
+
+
+implementation
+
+uses MainUnit;
+
+procedure TSynchTheard.Execute;
+var
+j: integer;
+begin
+ iTotalCount := SQliteQueryExec.Count + FBqueryExec.Count;
+ iProcessingCount := 0;
+ for j := 0 to SQliteQueryExec.Count -1 do
+      begin
+      SQLiteTabExec.Create (db, SQliteQueryExec.Strings[j]);
+      iProcessingCount := iProcessingCount + 1;
+      Synchronize(UpDateForm);
+      end;
+
+ for j := 0 to FBqueryExec.Count -1 do
+   begin
+   // with IBQueryExec do
+   with MainForm.IBQuery1 do
+      begin
+       close;
+       SQL.Clear;
+       SQL.Add(FBqueryExec.Strings[j]);
+       open;
+       iProcessingCount := iProcessingCount + 1;
+       Synchronize(UpDateForm);
+      end;
+     //IBTranc.Commit;
+     MainForm.IBTransaction1.Commit;
+    end;
+ IBQueryExec.Free;
+ IBTranc.Free;
+end;
+
+procedure TSynchTheard.UpDateForm;
+begin
+ MainForm.ProgressBar1.Position := (iProcessingCount div iTotalCount)*100;
+end;
+
+end.

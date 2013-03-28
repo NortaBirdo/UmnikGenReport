@@ -1,0 +1,21 @@
+program SynchDB;
+
+uses
+  Vcl.Forms,
+  MainUnit in 'MainUnit.pas' {MainForm},
+  CollisionUnit in 'CollisionUnit.pas' {CollisionForm},
+  ChangePassUnit in 'ChangePassUnit.pas' {ChangePassForm},
+  AboutUnit in 'AboutUnit.pas' {AboutForm},
+  HelpUnit in 'HelpUnit.pas' {HelpForm},
+  ResourceUnit in 'ResourceUnit.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TChangePassForm, ChangePassForm);
+  Application.CreateForm(TCollisionForm, CollisionForm);
+  Application.CreateForm(TMainForm, MainForm);
+  Application.Run;
+end.

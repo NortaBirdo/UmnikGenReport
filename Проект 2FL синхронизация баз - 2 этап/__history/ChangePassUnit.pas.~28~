@@ -1,0 +1,178 @@
+{ Unit  ChangePassUnit
+Версия: 1.0 от 12.10
+Разработчик: Соколовский Николай
+Sokolovskynik@gmail.com
+
+зависимости: IniFiles
+
+модуль хранит операции связанные с паролем:
+подключение к базе, извлечени и изменение информации о пароле}
+unit ChangePassUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  SQLite3, SQLiteWrap, IniFiles;
+
+type
+  TChangePassForm = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Okbutton: TButton;
+    CancelButton: TButton;
+    UserNameEdit: TEdit;
+    OldPassEdit: TEdit;
+    NewPassEdit: TEdit;
+    RepNewPassEdit: TEdit;
+    procedure CancelButtonClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure OkbuttonClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ChangePassForm: TChangePassForm;
+  db: TSQLiteDatabase;
+  table: TSQLiteTable;
+  sTab, sFieldUserName, sFieldPassName: string; //переменные для хранения таблицы, имен полей
+
+implementation
+
+{$R *.dfm}
+
+uses MainUnit;
+
+//выход без изменений
+procedure TChangePassForm.CancelButtonClick(Sender: TObject);
+begin
+ChangePassForm.Close;
+end;
+
+procedure TChangePassForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ db.Free;
+end;
+
+//подгрузка данных при показе окна
+procedure TChangePassForm.FormShow(Sender: TObject);
+var
+sPath, sQuery: string;                       //переменные для хранения пути и запроса
+SettingFile: TIniFile;
+begin
+  //Узнаем путь к базам
+  GetDir (0, sPath);
+  sPath := sPath + '\setting.ini';
+                                    //Если файл существует, загружаем
+  if FileExists(sPath) then SettingFile := TIniFile.Create(sPath)
+                      else
+                       begin        //если нет, завершаем работу
+                         ShowMessage('Файл настроек не найден. Синхронизация не возможна.');
+                         Okbutton.Enabled := false;
+                         exit
+                       end;
+
+ if Mainform.USBDriveComboBox.Text = '' then  //если носитель не выбран
+  begin                              //информируем
+    ShowMessage('Не выбран сменный носитель. Пожалуйста выберите сменный диск с базой данных');
+    Mainform.USBDriveComboBox.Items.Clear;
+    Mainform.GetDiscs;                        //обновляем список носителей
+    Okbutton.Enabled := false;
+    exit;                           //и выходим
+  end;
+   //читаем путь к SQLite БД
+  sPath := Mainform.USBDriveComboBox.Text + ':/' + SettingFile.ReadString('PathDB', 'SQLiteDB', '');
+
+  if sPath = Mainform.USBDriveComboBox.Text + ':/'  then    //Если путь пустой
+    begin                          //Информируем
+      ShowMessage('Параметр размещения БД SQLite не найден. Укажите путь вручную.');
+                                   //Открываем окно выбора
+      if Not (Mainform.OpenDialog1.Execute) then  //Если ничего не выбрано
+        begin                       //информируем и выходим
+         ShowMessage('Путь к БД SQLite не указан. Работа будет завершена.');
+         Okbutton.Enabled := false;
+         exit;
+        end
+        else sPath := MainForm.USBDriveComboBox.Text + ':/' + MainForm.OpenDialog1.FileName;
+    end;
+
+ //читаем настройки, откуда будет браться пароль и имя
+ sTab := SettingFile.ReadString('PassInfo', 'TableName', '');
+ if sTab = '' then
+  begin
+    ShowMessage('Не найдено имя таблицы паролей. Изменение не возможно');
+    Okbutton.Enabled := false;
+    exit;
+  end;
+
+ sFieldUserName := SettingFile.ReadString('PassInfo', 'LogFieldName', '');
+  if sFieldUserName = '' then
+  begin
+    ShowMessage('Не найдено поле имени пользователя. Изменение не возможно');
+    Okbutton.Enabled := false;
+    exit;
+  end;
+
+ sFieldPassName := SettingFile.ReadString('PassInfo', 'PassFieldName', '');
+  if sFieldPassName = '' then
+  begin
+    ShowMessage('Не найдено поле пароля пользователя. Изменение не возможно');
+    Okbutton.Enabled := false;
+    exit;
+  end;
+
+ try
+  db := TSQLiteDatabase.Create(sPath);
+  sQuery := 'SELECT * FROM ' + STab;
+  table := TSQLiteTable.Create(db, sQuery);
+
+  UserNameEdit.Text := table.FieldAsString(table.FieldIndex[sFieldUserName]);
+  OldPassEdit.Text := table.FieldAsString(table.FieldIndex[sFieldPassName]);
+
+  table.Free;
+   except
+     on E: Exception do
+    begin
+      Application.MessageBox(PChar(E.Message), 'Ошибка', MB_ICONERROR);
+      exit;
+    end;
+  end;
+end;
+
+procedure TChangePassForm.OkbuttonClick(Sender: TObject);
+var
+sQuery: String;
+begin
+ //проверям что новый пароль введн без опечаток
+  if NewPassEdit.Text <> RepNewPassEdit.Text then
+   begin
+     ShowMessage('Введенные пароли не совпадают');
+     NewPassEdit.SetFocus;
+     exit;
+   end;
+ //изменяем запись в БД
+ try
+
+  sQuery := 'UPDATE '+ sTab + ' SET ' + sFieldUserName + '=' + #39 + UserNameEdit.Text + #39 +
+   ', ' + sFieldPassName + '=' + #39 + NewPassEdit.Text+ #39;
+  table := TSQLiteTable.Create(db, sQuery);
+  table.Free;
+  ChangePassForm.Close;
+ except
+     on E: Exception do
+    begin
+      Application.MessageBox(PChar(E.Message), 'Ошибка', MB_ICONERROR);
+      exit;
+    end;
+  end;
+
+end;
+
+end.
