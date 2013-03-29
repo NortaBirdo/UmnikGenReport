@@ -137,11 +137,12 @@ begin
                     end;
     a:=i;
     b:=i + length (s2);
-    if WordDoc.Documents.Item(PrivateReport).Range(a,b).Text=S2 then begin
-                                                                      FEnd:=i;
-                                                                      Result.startPriv := FEnd;
-                                                                      break;
-                                                                     end;
+    s := WordDoc.Documents.Item(PrivateReport).Range(a,b).Text;
+    if (s=S2) or (s = 'КОНЕЦ')  then begin
+                                    FEnd:=i;
+                                    Result.startPriv := FEnd;
+                                    break;
+                                   end;
   end;
 
  //если это один из потенциально отсутсвующих разделов
@@ -168,7 +169,10 @@ begin
    b:=i+6;
    if (WordDoc.Documents.Item(GenReport).Range(a,b).Text=S3)
     then FStart:=i
-    else if (WordDoc.Documents.Item(GenReport).Range(a,b).Text=S4) then FEnd:=i+6;
+    else if (WordDoc.Documents.Item(GenReport).Range(a,b).Text=S4) then begin
+                                                                         FEnd:=i+6;
+                                                                         break;
+                                                                        end;
   end;
 
  if (FStart=0) or (FEnd=0) then begin
@@ -224,7 +228,7 @@ begin
      end;
   10: begin
       sStartPrivReport := 'ПРИЛОЖЕНИЕ';
-      sEnd := '';
+      sEnd := 'КОНЕЦ';
      end;
 
  end;
@@ -257,6 +261,7 @@ begin
  for I := 0 to ChListBoxFileList.Items.Count - 1 do
   begin
    if not (ChListBoxFileList.Checked[i]) then Continue;
+   MemoGenReportProtocol.Lines.Add('Начата обработка отчета ' + ChListBoxFileList.Items.Strings[i]);
    PrivateReport := DirectoryListBox1.Directory + '\' + ChListBoxFileList.Items.Strings[i];
    WordDoc.Documents.Open(PrivateReport);
    //перебор и вставка разделов отчета
@@ -276,10 +281,14 @@ begin
               else sEndShablon := IntToStr(j);
       if i<10 then sEndShablon := sEndShablon + '0' + IntToStr(i+1) + '#>'
               else sEndShablon := sEndShablon + IntToStr(i+1) + '#>';
-
-      iError := FindAndReplace(WordDoc, LocalPos,  ShablonPath, PrivateReport,
+      try
+       iError := FindAndReplace(WordDoc, LocalPos,  ShablonPath, PrivateReport,
                              sStartPrivReport, sEndPrivReport, sStartSnablon, sEndShablon);
-
+      except
+       MemoGenReportProtocol.Lines.Add('Ошибка обработки отчета ' + ChListBoxFileList.Items.Strings[i] + ' раздел ' + sStartPrivReport);
+       Label7.Caption := IntToStr(StrToInt(Label7.Caption) + 1);
+       break;
+      end;
       case iError.startPriv of
        -1: MemoGenReportProtocol.Lines.Add('В отчете ' + ChListBoxFileList.Items.Strings[i] + ' не найден раздел ' + sStartPrivReport);
        -2: MemoGenReportProtocol.Lines.Add('Не найдены метки для раздела ' + sStartPrivReport + ' отчета ' + ChListBoxFileList.Items.Strings[i]);
@@ -294,6 +303,8 @@ begin
                    end;
 
      end;
+   MemoGenReportProtocol.Lines.Add('Отчет ' + ChListBoxFileList.Items.Strings[i] + ' обработан');
+   Label6.Caption := IntToStr(StrToInt(Label6.Caption) + 1);
    WordDoc.Documents.Item(PrivateReport).Close;
    MainForm.Refresh;
    Application.ProcessMessages;
