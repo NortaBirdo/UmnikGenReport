@@ -64,7 +64,7 @@ object MainForm: TMainForm
         Left = 0
         Top = 0
         Caption = #1057#1086#1073#1088#1072#1090#1100' '#1086#1090#1095#1077#1090
-        ImageIndex = 1
+        ImageIndex = 0
         MenuItem = N3
       end
       object ToolButton3: TToolButton
@@ -79,7 +79,7 @@ object MainForm: TMainForm
         Left = 91
         Top = 0
         Caption = #1057#1087#1088#1072#1074#1082#1072
-        ImageIndex = 3
+        ImageIndex = 1
         MenuItem = N8
       end
       object ToolButton5: TToolButton
@@ -145,14 +145,14 @@ object MainForm: TMainForm
       Height = 13
       Caption = '0'
     end
-    object Label6: TLabel
+    object LabelIncludeFile: TLabel
       Left = 177
       Top = 43
       Width = 6
       Height = 13
       Caption = '0'
     end
-    object Label7: TLabel
+    object LabelError: TLabel
       Left = 177
       Top = 62
       Width = 6
@@ -168,18 +168,27 @@ object MainForm: TMainForm
     TabOrder = 4
     OnChange = DirectoryListBox1Change
   end
+  object ChBoxVisualWork: TCheckBox
+    Left = 236
+    Top = 167
+    Width = 202
+    Height = 17
+    Caption = #1042#1080#1079#1091#1072#1083#1080#1079#1080#1088#1086#1074#1072#1090#1100' '#1088#1072#1073#1086#1090#1091
+    TabOrder = 5
+  end
   object XPManifest1: TXPManifest
     Left = 232
     Top = 24
   end
   object MainMenu1: TMainMenu
+    Images = ImageList1
     Left = 304
     Top = 24
     object N1: TMenuItem
       Caption = #1060#1072#1081#1083
       object N3: TMenuItem
         Caption = #1057#1086#1073#1088#1072#1090#1100' '#1086#1090#1095#1077#1090
-        ImageIndex = 1
+        ImageIndex = 0
         OnClick = N3Click
       end
       object N4: TMenuItem
@@ -195,7 +204,7 @@ object MainForm: TMainForm
       Caption = #1055#1086#1084#1086#1097#1100
       object N8: TMenuItem
         Caption = #1057#1087#1088#1072#1074#1082#1072
-        ImageIndex = 3
+        ImageIndex = 1
         OnClick = N8Click
       end
       object N9: TMenuItem
@@ -208,10 +217,10 @@ object MainForm: TMainForm
     end
   end
   object ImageList1: TImageList
-    Left = 400
+    Left = 424
     Top = 24
     Bitmap = {
-      494C010103000800380010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000800140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       00000000000000000000000000000000000000000000000000000409173F0C18
       3F81070F26640000003600000036000000360000003600000036000000360000
