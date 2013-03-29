@@ -1,12 +1,3 @@
-{модуль MainUnit
-Версия: 1.0
-Дата: 29.03.13
-Разработчик: Соколовский Н.С.
-
-Зависимолсти:  ComObj, CatalogUnit
-Определяет объект: определяет главную форму.
-содержит описание процедуры генерации отчета
-}
 unit MainUnit;
 
 interface
@@ -45,10 +36,9 @@ type
     Label4: TLabel;
     Label5: TLabel;
     LabelAllFileCount: TLabel;
-    LabelIncludeFile: TLabel;
-    LabelError: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
     DirectoryListBox1: TDirectoryListBox;
-    ChBoxVisualWork: TCheckBox;
     ImageList1: TImageList;
     procedure DirectoryListBox1Change(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -62,9 +52,8 @@ type
     { Public declarations }
   end;
   type
-  //тип хранит позиции курсора, используемые для поиска следующего места вставки
   TCoordinate = record
-   startPriv, startTotel: OleVariant;  //для индивидуального отчета, для общего отчета
+   startPriv, startTotel: OleVariant;
    end;
 
   var
@@ -114,16 +103,6 @@ LabelAllFileCount.Caption := IntToStr(high + 1);
 end;
 
 //генерация отчета
-{FindAndReplace: TCoordinate- копирует один раздел отчета в общий отчет, возвращает текущие позиции курсоров в документе
-WordDoc: OleVariant - указатель на объект с открытыми  документами
-LocalPos: TCoordinate - текущая позиция курсоров в документах
-GenReport             - имя генерруемого отчета
-PrivateReport:TFileName - имя индивидуального отчета
-строки-метки:
-S1 - начало области в индивидуальном отчете
-S2 - конец области в индивидуальном отчете
-S3 - начало области в общем отчете
-S4 - конец области в общем отчете}
 function FindAndReplace(WordDoc: OleVariant; LocalPos: TCoordinate; GenReport, PrivateReport:TFileName; S1, S2, S3, S4:string):TCoordinate;
 var
  FStart, FEnd, a, b: OleVariant;
@@ -208,7 +187,6 @@ begin
                                 end;
 end;
 
-//выбор меток диапозона копирования для индивидуального отчета
 procedure GenLabel(var sStartPrivReport, sEnd: string; i:integer);
 begin
  case i of
@@ -256,22 +234,22 @@ begin
  end;
 end;
 
-//запуск генерации
 procedure TMainForm.N3Click(Sender: TObject);
 var
- iError, LocalPos: TCoordinate;      //хранение позиций курсора
+ iError, LocalPos: TCoordinate;
  ShablonPath, PrivateReport:string;  //пути к файлам
  WordDoc: OleVariant;                //док-документ
  i, j: integer;                      //счетчики
- sStartSnablon, sEndShablon: string; //метки в сборном отчете
- sStartPrivReport, sEndPrivReport: string;  //метки в индивидуальном отчете
- posBig: array [0..9] of OleVariant; //массив координат вставленной области для большого отчета
+ sStartSnablon, sEndShablon: string; //метки
+ sStartPrivReport, sEndPrivReport: string;
+ pos: OleVariant;
+ posBig: array [0..9] of OleVariant; //массив координат кона вставленной области для большого отчета
 begin
- //открываем шаблон
+
  ShablonPath := ExtractFilePath(Application.ExeName) + 'Шаблон.docx';
 
  WordDoc:=CreateOLEObject('Word.Application');
- WordDoc.Visible := ChBoxVisualWork.Checked;
+ WordDoc.Visible:=true;
  WordDoc.Documents.Open(ShablonPath);
 
  //инициализируем массив
@@ -284,16 +262,14 @@ begin
   begin
    if not (ChListBoxFileList.Checked[i]) then Continue;
    MemoGenReportProtocol.Lines.Add('Начата обработка отчета ' + ChListBoxFileList.Items.Strings[i]);
-   //открываем индивидуальный отчет
    PrivateReport := DirectoryListBox1.Directory + '\' + ChListBoxFileList.Items.Strings[i];
    WordDoc.Documents.Open(PrivateReport);
    //перебор и вставка разделов отчета
    LocalPos.startPriv := 0;
    for j := 1 to 10 do
      begin
-      //позиция курсора в документе
+      //гененерация меток для индивидуального шаблона
       LocalPos.startTotel := posBig[j-1];
-      //выбор меток для индивидуального отчета
       GenLabel(sStartPrivReport, sEndPrivReport, j);
       //генерация меток для шаблона
       if j<10 then sStartSnablon := '<#0' + IntToStr(j)
@@ -305,21 +281,18 @@ begin
               else sEndShablon := IntToStr(j);
       if i<10 then sEndShablon := sEndShablon + '0' + IntToStr(i+1) + '#>'
               else sEndShablon := sEndShablon + IntToStr(i+1) + '#>';
-      //копирование раздела
       try
        iError := FindAndReplace(WordDoc, LocalPos,  ShablonPath, PrivateReport,
                              sStartPrivReport, sEndPrivReport, sStartSnablon, sEndShablon);
       except
        MemoGenReportProtocol.Lines.Add('Ошибка обработки отчета ' + ChListBoxFileList.Items.Strings[i] + ' раздел ' + sStartPrivReport);
-       LabelError.Caption := IntToStr(StrToInt(LabelError.Caption) + 1);
+       Label7.Caption := IntToStr(StrToInt(Label7.Caption) + 1);
        break;
       end;
-      //если позиции не найдены, сооббщаем
       case iError.startPriv of
        -1: MemoGenReportProtocol.Lines.Add('В отчете ' + ChListBoxFileList.Items.Strings[i] + ' не найден раздел ' + sStartPrivReport);
        -2: MemoGenReportProtocol.Lines.Add('Не найдены метки для раздела ' + sStartPrivReport + ' отчета ' + ChListBoxFileList.Items.Strings[i]);
       end;
-      //если не первые два раздела, записываем позиции курсора в документе
       if j<3  then begin
                     LocalPos.startPriv := 0;
                     LocalPos.startTotel := 0;
@@ -331,17 +304,15 @@ begin
 
      end;
    MemoGenReportProtocol.Lines.Add('Отчет ' + ChListBoxFileList.Items.Strings[i] + ' обработан');
-   LabelIncludeFile.Caption := IntToStr(StrToInt(LabelIncludeFile.Caption) + 1);
-   //закрываем документ
+   Label6.Caption := IntToStr(StrToInt(Label6.Caption) + 1);
    WordDoc.Documents.Item(PrivateReport).Close;
    MainForm.Refresh;
    Application.ProcessMessages;
   end;
- //закрываем шаблон
+
  WordDoc.Documents.Item(ShablonPath).Close;
  WordDoc.Quit;
  WordDoc:=Unassigned;
- ShowMessage('Сборка окончена.');
 
 end;
 

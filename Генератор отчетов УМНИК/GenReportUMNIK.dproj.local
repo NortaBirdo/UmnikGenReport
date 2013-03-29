@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.276,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\AboutFormUnit.dfm=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.129,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\ReportGenUnit.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.132,C:\Users\Николай\Documents\RAD Studio\Projects\Project1.dproj=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\GenReportUMNIK.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.888,C:\Users\Николай\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\MainUnit.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.195,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\CatalogUnit.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.139,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\HelpFormUnit.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.473,=C:\Users\Николай\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.674,=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.276,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\AboutFormUnit.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.889,C:\Users\Николай\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\MainUnit.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.139,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\HelpFormUnit.dfm=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.888,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\MainUnit.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.088,=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.713,=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.995,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\ReportGenUnit.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.346,=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.129,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\ReportGenUnit.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.889,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\MainUnit.dfm=C:\Users\Николай\Documents\RAD Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.473,=C:\Users\Николай\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.995,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\ReportGenUnit.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.713,=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.132,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\GenReportUMNIK.dproj=C:\Users\Николай\Documents\RAD Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.139,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.dfm=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\HelpFormUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.276,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.dfm=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\AboutFormUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.139,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\HelpFormUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.276,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\AboutFormUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.674,=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.195,C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\Unit1.pas=C:\Users\Николай\Documents\RAD Studio\Projects\Генератор отчетов УМНИК\CatalogUnit.pas</Transaction>
   </Transactions>
 </BorlandProject>
