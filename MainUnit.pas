@@ -39,6 +39,7 @@ type
     Label6: TLabel;
     Label7: TLabel;
     DirectoryListBox1: TDirectoryListBox;
+    CheckBoxIsVisible: TCheckBox;
     ImageList1: TImageList;
     procedure DirectoryListBox1Change(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -46,6 +47,7 @@ type
     procedure N8Click(Sender: TObject);
     procedure ChListBoxFileListClickCheck(Sender: TObject);
     procedure N3Click(Sender: TObject);
+
   private
     { Private declarations }
   public
@@ -249,7 +251,7 @@ begin
  ShablonPath := ExtractFilePath(Application.ExeName) + 'Шаблон.docx';
 
  WordDoc:=CreateOLEObject('Word.Application');
- WordDoc.Visible:=true;
+ WordDoc.Visible:= CheckBoxIsVisible.Checked;
  WordDoc.Documents.Open(ShablonPath);
 
  //инициализируем массив
@@ -290,8 +292,10 @@ begin
        break;
       end;
       case iError.startPriv of
-       -1: MemoGenReportProtocol.Lines.Add('В отчете ' + ChListBoxFileList.Items.Strings[i] + ' не найден раздел ' + sStartPrivReport);
-       -2: MemoGenReportProtocol.Lines.Add('В сборном отчете не найдены метки для вставки раздела: ' + sStartPrivReport);
+       -1: MemoGenReportProtocol.Lines.Add('В отчете ' + ChListBoxFileList.Items.Strings[i] + ' не найден раздел ' + sStartPrivReport +
+                 'Метки: ' +   sStartPrivReport +', ' + sEndPrivReport  +', ' + sStartSnablon  +', ' +  sEndShablon);
+       -2: MemoGenReportProtocol.Lines.Add('В сборном отчете не найдены метки для вставки раздела: ' + sStartPrivReport +
+                  ' стартовая:' + sStartSnablon + ' конечная:' +sEndShablon );
       end;
       if j<3  then begin
                     LocalPos.startPriv := 0;
@@ -337,5 +341,7 @@ Application.CreateForm(THelpForm, HelpForm);
 HelpForm.ShowModal;
 HelpForm.Free;
 end;
+
+
 
 end.
